@@ -22,8 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import net.dries007.tfc.api.types.Rock;
@@ -89,9 +91,29 @@ public final class Helpers
     }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     public static <T extends TileEntity> T getTE(IBlockAccess world, BlockPos pos, Class<T> aClass)
     {
         TileEntity te = world.getTileEntity(pos);
+        if (!aClass.isInstance(te)) return null;
+        return (T) te;
+    }
+
+    /**
+     * Used to get a tile entity when it is nessecary to make saftey checks
+     * See {@link net.minecraft.block.Block#getActualState(IBlockState, IBlockAccess, BlockPos)}
+     *
+     * @param world  The world
+     * @param pos    The position
+     * @param aClass The TE class to return
+     * @param <T>    The type of the TE
+     * @return the te if it exists, or null if it doesn't
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    public static <T extends TileEntity> T getTESafely(IBlockAccess world, BlockPos pos, Class<T> aClass)
+    {
+        TileEntity te = world instanceof ChunkCache ? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos);
         if (!aClass.isInstance(te)) return null;
         return (T) te;
     }

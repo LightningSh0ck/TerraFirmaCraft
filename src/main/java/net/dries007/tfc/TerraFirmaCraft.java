@@ -123,6 +123,7 @@ public final class TerraFirmaCraft
         network.registerMessage(new PacketCrucibleUpdate.Handler(), PacketCrucibleUpdate.class, ++id, Side.CLIENT);
         network.registerMessage(new PacketChunkData.Handler(), PacketChunkData.class, ++id, Side.CLIENT);
         network.registerMessage(new PacketCapabilityContainerUpdate.Handler(), PacketCapabilityContainerUpdate.class, ++id, Side.CLIENT);
+        network.registerMessage(new PacketSheetUpdate.Handler(), PacketSheetUpdate.class, ++id, Side.CLIENT);
 
         CalenderTFC.reload();
 

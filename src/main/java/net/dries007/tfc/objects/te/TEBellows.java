@@ -9,13 +9,13 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +30,8 @@ import net.dries007.tfc.util.IBellowsHandler;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
 
-public class TEBellows extends TileEntity
+@ParametersAreNonnullByDefault
+public class TEBellows extends TEBase
 {
     /**
      * The list of position offsets that bellows must check to input air into.
