@@ -26,29 +26,36 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.objects.blocks.devices.BlockCharcoalForge;
 import net.dries007.tfc.objects.blocks.devices.BlockFirePit;
-import net.dries007.tfc.util.IBellowsHandler;
+import net.dries007.tfc.util.IBellowsConsumerBlock;
 
 import static net.minecraft.block.BlockHorizontal.FACING;
 
 @ParametersAreNonnullByDefault
 public class TEBellows extends TEBase
 {
+    public static final Vec3i OFFSET_LEVEL = new Vec3i(1, 0, 0);
+    public static final Vec3i OFFSET_INSET = new Vec3i(1, -1, 0);
+
+    private static final Set<Vec3i> offsets = new HashSet<>();
+    private static final int BELLOWS_AIR = 200;
+
+    static
+    {
+        addBellowsOffset(OFFSET_LEVEL);
+        addBellowsOffset(OFFSET_LEVEL);
+    }
+
     /**
-     * The list of position offsets that bellows must check to input air into.
-     * Directions go like this:
+     * Notify the bellows that it should check a certain offset when blowing air
      * X: front of the bellows, positive values go forward
      * Y: vertical, self-explanatory, negative is below.
      * Z: X but rotated 90 degrees clockwise, positive values go right. in most cases you want this to be 0
-     *
-     * For example: a block that must sit right in front of the bellows(like fire pits) must register {@code Vec3i(1,0,0)},
+     * For example: a block that must sit right in front of the bellows(like fire pits) must check {@code Vec3i(1,0,0)},
      * {@link BlockFirePit}
-     * meanwhile, block that sink into ground(like forges) might want to register {@code Vec3i(1,-1,0)}.
+     * meanwhile, blocks that sink into ground( like forges) must check {@code Vec3i(1,-1,0)}.
      * {@link BlockCharcoalForge}
-     * If there is a guarantee for another block to register that position,
-     * then there is no need do do it anymore with yours.
+     * @param offset The offset to check
      */
-    private static final Set<Vec3i> offsets = new HashSet<>();
-
     public static void addBellowsOffset(Vec3i offset)
     {
         offsets.add(offset);
@@ -117,9 +124,9 @@ public class TEBellows extends TEBase
                 .offset(direction, offset.getX())
                 .offset(direction.rotateY(), offset.getZ());
             Block block = world.getBlockState(posx).getBlock();
-            if (block instanceof IBellowsHandler && ((IBellowsHandler) block).canIntakeFrom(this, offset, direction))
+            if (block instanceof IBellowsConsumerBlock && ((IBellowsConsumerBlock) block).canIntakeFrom(this, offset, direction))
             {
-                ((IBellowsHandler) block).onAirIntake(this, world, posx, 1f);
+                ((IBellowsConsumerBlock) block).onAirIntake(this, world, posx, BELLOWS_AIR);
                 if (world.isRemote)
                 {
                     //TODO: actual sound, better particles and animation

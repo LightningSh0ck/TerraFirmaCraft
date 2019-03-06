@@ -64,7 +64,7 @@ public class CapabilityContainerListener implements IContainerListener
     }
 
     /**
-     * This is called to send a single slot contents. It uses a modified packet factory method to accept a capability instance
+     * This is called to send a single slot contents. It uses a modified packet factory method to acceptHeat a capability instance
      * This only gets called when a slot changes (only non-capability changes count)
      */
     @Override

@@ -26,6 +26,7 @@ import net.dries007.tfc.objects.recipes.heat.HeatRecipe;
 import net.dries007.tfc.objects.recipes.heat.HeatRecipeManager;
 import net.dries007.tfc.util.Fuel;
 import net.dries007.tfc.util.FuelManager;
+import net.dries007.tfc.util.IHeatConsumerBlock;
 import net.dries007.tfc.util.ITileFields;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
@@ -59,7 +60,7 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
     }
 
     /**
-     * Used by {@link net.dries007.tfc.util.IHeatProviderBlock}
+     * Used by {@link IHeatConsumerBlock}
      *
      * @return the temperature
      */
@@ -324,9 +325,9 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
         }
     }
 
-    public void onAirIntake(float amount)
+    public void onAirIntake(int amount)
     {
-        airTicks += (int) (200 * amount);
+        airTicks += amount;
         if (airTicks > 600)
         {
             airTicks = 600;
