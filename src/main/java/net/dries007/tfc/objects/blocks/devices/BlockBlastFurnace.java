@@ -1,3 +1,8 @@
+/*
+ * Work under Copyright. Licensed under the EUPL.
+ * See the project README.md and LICENSE.txt for more information.
+ */
+
 package net.dries007.tfc.objects.blocks.devices;
 
 import java.util.function.Predicate;
@@ -62,11 +67,12 @@ public class BlockBlastFurnace extends Block implements IBellowsConsumerBlock
         for (int i = 0; i < 5; i++)
         {
             BlockPos center = pos.up(i);
-            if (!BLAST_FURNACE_CHIMNEY.test(world, pos))
+            if (!BLAST_FURNACE_CHIMNEY.test(world, center))
             {
                 return i;
             }
         }
+        // Maximum levels
         return 5;
     }
 

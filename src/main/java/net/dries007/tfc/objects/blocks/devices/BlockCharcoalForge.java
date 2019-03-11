@@ -56,11 +56,16 @@ public class BlockCharcoalForge extends Block implements IBellowsConsumerBlock
         BiFunction<World, BlockPos, Boolean> skyMatcher = World::canBlockSeeSky;
         CHARCOAL_FORGE_MULTIBLOCK = new Multiblock()
             .match(new BlockPos(0, 1, 0), state -> state.getBlock() == BlocksTFC.CRUCIBLE || state.getBlock() == Blocks.AIR)
-            .matchOneOf(new BlockPos(0, 0, 0), new Multiblock()
+            .matchOneOf(new BlockPos(0, 1, 0), new Multiblock()
+                .match(new BlockPos(0, 0, 0), skyMatcher)
                 .match(new BlockPos(0, 0, 1), skyMatcher)
+                .match(new BlockPos(0, 0, 2), skyMatcher)
                 .match(new BlockPos(0, 0, -1), skyMatcher)
+                .match(new BlockPos(0, 0, -2), skyMatcher)
                 .match(new BlockPos(1, 0, 0), skyMatcher)
+                .match(new BlockPos(2, 0, 0), skyMatcher)
                 .match(new BlockPos(-1, 0, 0), skyMatcher)
+                .match(new BlockPos(-2, 0, 0), skyMatcher)
             );
     }
 
@@ -93,8 +98,8 @@ public class BlockCharcoalForge extends Block implements IBellowsConsumerBlock
     {
         // todo: better checks for this involving air and crucible: TEST THE MULTIBLOCK STUFF!!!
         boolean result = CHARCOAL_FORGE_MULTIBLOCK.test(world, pos);
-        TerraFirmaCraft.getLog().info("Result: ", result);
-        return true;
+        TerraFirmaCraft.getLog().info("Result: {}", result);
+        return result;
     }
 
     public BlockCharcoalForge()
