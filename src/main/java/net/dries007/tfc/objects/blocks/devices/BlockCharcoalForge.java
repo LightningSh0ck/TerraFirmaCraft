@@ -33,7 +33,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.TFCGuiHandler;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
 import net.dries007.tfc.objects.items.ItemFireStarter;
@@ -96,10 +95,7 @@ public class BlockCharcoalForge extends Block implements IBellowsConsumerBlock
 
     public static boolean hasValidChimney(World world, BlockPos pos)
     {
-        // todo: better checks for this involving air and crucible: TEST THE MULTIBLOCK STUFF!!!
-        boolean result = CHARCOAL_FORGE_MULTIBLOCK.test(world, pos);
-        TerraFirmaCraft.getLog().info("Result: {}", result);
-        return result;
+        return CHARCOAL_FORGE_MULTIBLOCK.test(world, pos);
     }
 
     public BlockCharcoalForge()

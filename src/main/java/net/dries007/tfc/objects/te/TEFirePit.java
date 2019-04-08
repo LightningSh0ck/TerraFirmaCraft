@@ -8,6 +8,7 @@ package net.dries007.tfc.objects.te;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,16 +58,6 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
         temperature = 0;
         burnTemperature = 0;
         burnTicks = 0;
-    }
-
-    /**
-     * Used by {@link IHeatConsumerBlock}
-     *
-     * @return the temperature
-     */
-    public float getTemperature()
-    {
-        return temperature;
     }
 
     @Override
@@ -123,6 +114,13 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
             else if (temperature > targetTemp)
             {
                 temperature -= (airTicks > 0 ? 0.5 : 1) * ConfigTFC.GENERAL.temperatureModifierHeating;
+            }
+
+            // Provide heat to blocks that are one block above
+            Block blockUp = world.getBlockState(pos.up()).getBlock();
+            if (blockUp instanceof IHeatConsumerBlock)
+            {
+                ((IHeatConsumerBlock) blockUp).acceptHeat(world, pos.up(), temperature);
             }
 
             // Update items in slots

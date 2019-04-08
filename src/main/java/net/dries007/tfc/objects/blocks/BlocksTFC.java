@@ -107,7 +107,8 @@ public final class BlocksTFC
     public static final BlockTorchTFC TORCH = getNull();
     public static final BlockCharcoalForge CHARCOAL_FORGE = getNull();
     public static final BlockCrucible CRUCIBLE = getNull();
-    public static final BlockSlag SLAG = getNull();
+    public static final BlockMolten MOLTEN = getNull();
+    public static final BlockBlastFurnace BLAST_FURNACE = getNull();
 
     // All these are for use in model registration. Do not use for block lookups.
     // Use the static get methods in the classes instead.
@@ -400,6 +401,7 @@ public final class BlocksTFC
         register(r, "ingot_pile", new BlockIngotPile());
         register(r, "log_pile", new BlockLogPile());
         register(r, "pit_kiln", new BlockPitKiln());
+        register(r, "molten", new BlockMolten());
 
         // todo: cactus ?
         // todo: reeds/sugarcane ?

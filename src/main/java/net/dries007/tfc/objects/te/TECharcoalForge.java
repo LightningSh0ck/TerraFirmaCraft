@@ -65,16 +65,6 @@ public class TECharcoalForge extends TEInventory implements ITickable, ITileFiel
         airTicks = 0;
     }
 
-    /**
-     * Used by {@link IHeatConsumerBlock}
-     *
-     * @return the current temperature
-     */
-    public float getTemperature()
-    {
-        return temperature;
-    }
-
     public void onAirIntake(int amount)
     {
         airTicks += amount;

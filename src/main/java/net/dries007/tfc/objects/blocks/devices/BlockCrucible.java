@@ -1,3 +1,8 @@
+/*
+ * Work under Copyright. Licensed under the EUPL.
+ * See the project README.md and LICENSE.txt for more information.
+ */
+
 package net.dries007.tfc.objects.blocks.devices;
 
 import java.util.List;
@@ -46,6 +51,7 @@ public class BlockCrucible extends Block implements IHeatConsumerBlock
         setSoundType(SoundType.METAL);
     }
 
+    @Override
     public void acceptHeat(World world, BlockPos pos, float temperature)
     {
         TECrucible tile = Helpers.getTE(world, pos, TECrucible.class);

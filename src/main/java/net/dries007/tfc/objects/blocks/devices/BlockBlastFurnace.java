@@ -17,6 +17,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -26,6 +27,7 @@ import net.minecraft.world.World;
 
 import net.dries007.tfc.client.TFCGuiHandler;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
+import net.dries007.tfc.objects.items.ItemFireStarter;
 import net.dries007.tfc.objects.te.TEBellows;
 import net.dries007.tfc.objects.te.TEBlastFurnace;
 import net.dries007.tfc.objects.te.TEMetalSheet;
@@ -42,7 +44,7 @@ public class BlockBlastFurnace extends Block implements IBellowsConsumerBlock
     {
         Predicate<IBlockState> stoneMatcher = state -> state.getMaterial() == Material.ROCK && state.isNormalCube();
         BLAST_FURNACE_CHIMNEY = new Multiblock()
-            .match(new BlockPos(0, 0, 0), state -> state.getBlock() == BlocksTFC.SLAG || state.getBlock() == Blocks.AIR)
+            .match(new BlockPos(0, 0, 0), state -> state.getBlock() == BlocksTFC.MOLTEN || state.getBlock() == Blocks.AIR)
             .match(new BlockPos(0, 0, 1), stoneMatcher)
             .match(new BlockPos(0, 0, 2), tile -> tile.getFace(EnumFacing.NORTH), TEMetalSheet.class)
             .match(new BlockPos(0, 0, -1), stoneMatcher)
@@ -100,12 +102,23 @@ public class BlockBlastFurnace extends Block implements IBellowsConsumerBlock
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
-        if (!playerIn.isSneaking() && !worldIn.isRemote)
+        if (!worldIn.isRemote)
         {
-            TFCGuiHandler.openGui(worldIn, pos, playerIn, TFCGuiHandler.Type.BLAST_FURNACE);
-            return true;
+            if (!state.getValue(LIT))
+            {
+                ItemStack held = playerIn.getHeldItem(hand);
+                if (ItemFireStarter.canIgnite(held))
+                {
+                    worldIn.setBlockState(pos, state.withProperty(LIT, true));
+                    return true;
+                }
+            }
+            if (!playerIn.isSneaking())
+            {
+                TFCGuiHandler.openGui(worldIn, pos, playerIn, TFCGuiHandler.Type.BLAST_FURNACE);
+            }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+        return true;
     }
 
     @Override

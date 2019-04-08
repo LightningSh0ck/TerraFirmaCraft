@@ -1,3 +1,8 @@
+/*
+ * Work under Copyright. Licensed under the EUPL.
+ * See the project README.md and LICENSE.txt for more information.
+ */
+
 package net.dries007.tfc.objects.te;
 
 import javax.annotation.Nonnull;
@@ -58,15 +63,6 @@ public class TECrucible extends TEInventory implements ITickable, ITileFields
     public void update()
     {
         if (world.isRemote) return;
-
-        // Update temperature based on block underneath
-        //Block blockDown = world.getBlockState(pos.down()).getBlock();
-        //if (blockDown instanceof IHeatConsumerBlock)
-        //{
-        //    this.targetTemperature = ((IHeatConsumerBlock) blockDown).acceptHeat(world, pos.down());
-        //}
-
-        // Update temperature
         if (temperature < targetTemperature)
         {
             temperature += (float) ConfigTFC.GENERAL.temperatureModifierHeating;

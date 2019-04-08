@@ -20,6 +20,8 @@ import net.dries007.tfc.types.DefaultMetals;
 
 public final class FuelManager
 {
+    public static final float CHARCOAL_BURN_TEMPERATURE = 1350f;
+
     private static final List<Fuel> fuels = new ArrayList<>();
     private static final Fuel EMPTY = new Fuel(ItemStack.EMPTY, 0, 0);
 
@@ -49,13 +51,13 @@ public final class FuelManager
         }
 
         // Coal (Vanilla)
-        fuels.add(new Fuel(new ItemStack(Items.COAL, 1, 0), 8000, 1375f, true));
+        fuels.add(new Fuel(new ItemStack(Items.COAL, 1, 0), 8000, 1350f, true));
         // Coal (TFC Variants)
         fuels.add(new Fuel(ItemOreTFC.get(TFCRegistries.ORES.getValue(DefaultMetals.BITUMINOUS_COAL), 1), 8000, 1350f, true));
-        fuels.add(new Fuel(ItemOreTFC.get(TFCRegistries.ORES.getValue(DefaultMetals.LIGNITE), 1), 8000, 1350f, true));
+        fuels.add(new Fuel(ItemOreTFC.get(TFCRegistries.ORES.getValue(DefaultMetals.LIGNITE), 1), 8000, 1400f, true));
 
         // Charcoal
-        fuels.add(new Fuel(new ItemStack(Items.COAL, 1, 1), 8000, 1525f, true));
+        fuels.add(new Fuel(new ItemStack(Items.COAL, 1, 1), 8000, 1350f, true));
 
         // todo: peat
     }
