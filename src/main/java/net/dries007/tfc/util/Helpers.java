@@ -28,11 +28,16 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
+import net.dries007.tfc.api.registries.TFCRegistries;
+import net.dries007.tfc.api.types.Plant;
 import net.dries007.tfc.api.types.Rock;
 import net.dries007.tfc.api.util.TFCConstants;
 import net.dries007.tfc.objects.blocks.BlockPeat;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
+import net.dries007.tfc.objects.blocks.plants.BlockShortGrassTFC;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
+import net.dries007.tfc.world.classic.ClimateTFC;
+import net.dries007.tfc.world.classic.chunkdata.ChunkDataTFC;
 
 public final class Helpers
 {
@@ -79,6 +84,23 @@ public final class Helpers
 
                     BlockRockVariant block = ((BlockRockVariant) current.getBlock());
                     world.setBlockState(target, block.getVariant(block.type.getGrassVersion(spreader)).getDefaultState());
+                }
+            }
+
+            for (Plant plant : TFCRegistries.PLANTS.getValuesCollection())
+            {
+                if (plant.getPlantType() == Plant.PlantType.SHORT_GRASS && rand.nextFloat() < 0.01f)
+                {
+                    float temp = ClimateTFC.getHeightAdjustedBiomeTemp(world, pos.up());
+                    BlockShortGrassTFC plantBlock = BlockShortGrassTFC.get(plant);
+
+                    if (world.isAirBlock(pos.up()) &&
+                        plant.isValidLocation(temp, ChunkDataTFC.getRainfall(world, pos.up()), world.getLightFromNeighbors(pos.up())) &&
+                        plant.isValidGrowthTemp(temp) &&
+                        rand.nextDouble() < plantBlock.getGrowthRate(world, pos.up()))
+                    {
+                        world.setBlockState(pos.up(), plantBlock.getDefaultState());
+                    }
                 }
             }
         }
@@ -226,6 +248,14 @@ public final class Helpers
         return null;
     }
 
+    /**
+     * This is meant to avoid Intellij's warnings about null fields that are injected to at runtime
+     * Use this for things like @ObjectHolder, @CapabilityInject, etc.
+     * AKA - The @Nullable is intentional. If it crashes your dev env, then fix your dev env, not this. :)
+     *
+     * @param <T> anything and everything
+     * @return null, but not null
+     */
     @Nonnull
     @SuppressWarnings("ConstantConditions")
     public static <T> T getNull()

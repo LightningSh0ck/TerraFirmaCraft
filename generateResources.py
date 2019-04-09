@@ -820,6 +820,18 @@ for wood_type in WOOD_TYPES:
         ('east', 'west'): 'tfc:blocks/wood/workbench_side',
     })
 
+    # BARREL
+    blockstate(('wood', 'barrel', wood_type), 'tfc:barrel', textures={
+        ('particle', 'planks'): 'tfc:blocks/wood/planks/%s' % wood_type,
+        'sheet': 'tfc:blocks/wood/sheets/%s' % wood_type,
+        'hoop': 'tfc:blocks/barrelhoop',
+    }, variants={
+        'sealed': {
+            'true': {'model': 'tfc:barrel_sealed'},
+            'false': {},
+        }
+    })
+
 #   _____ _
 #  |_   _| |
 #    | | | |_ ___ _ __ ___  ___
@@ -860,10 +872,13 @@ for item_type, tool_item in METAL_ITEMS.items():
     for metal, tool_metal in METAL_TYPES.items():
         if tool_item and not tool_metal:
             continue
-        parent = 'item/handheld' if item_type in TOOLS else 'item/generated'
-        if item_type in ['knife', 'javelin']:
-            parent = 'tfc:item/handheld_flipped'
-        item(('metal', item_type, metal), 'tfc:items/metal/%s/%s' % (item_type.replace('unfinished_', ''), metal), parent=parent)
+        if item_type == 'anvil':
+            model(('item', 'metal', 'anvil', metal), 'tfc:item/metal/anvil/transformations', {'all': 'tfc:blocks/metal/%s' % metal})
+        else:
+            parent = 'item/handheld' if item_type in TOOLS else 'item/generated'
+            if item_type in ['knife', 'javelin']:
+                parent = 'tfc:item/handheld_flipped'
+            item(('metal', item_type, metal), 'tfc:items/metal/%s/%s' % (item_type.replace('unfinished_', ''), metal), parent=parent)
 for metal in STEEL:
     for type in ['high_carbon', 'weak']:
         item(('metal', 'ingot', type + '_' + metal), 'tfc:items/metal/ingot/%s' % metal)

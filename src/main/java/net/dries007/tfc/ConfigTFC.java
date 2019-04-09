@@ -12,8 +12,6 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import net.dries007.tfc.world.classic.CalenderTFC;
-
 import static net.dries007.tfc.api.util.TFCConstants.MOD_ID;
 
 /**
@@ -43,9 +41,6 @@ public class ConfigTFC
         if (event.getModID().equals(MOD_ID))
         {
             TerraFirmaCraft.getLog().warn("Config changed");
-
-            CalenderTFC.reload();
-
             ConfigManager.sync(MOD_ID, Config.Type.INSTANCE);
         }
     }
@@ -93,6 +88,11 @@ public class ConfigTFC
         @Config.Comment("Number of ticks required for a torch to burn out (72000 = 1 in game hour), default is 72 hours. Set to -1 to disable torch burnout.")
         @Config.RangeInt(min = 20)
         public int torchTime = 200; // todo: change to 72000
+
+        @Config.Comment("Percentage chance that plants will grow each update. Smaller number = slower.")
+        @Config.RangeDouble(min = 0d, max = 1d)
+        @Config.LangKey("config." + MOD_ID + ".general.plantGrowthRate")
+        public double plantGrowthRate = 0.01d;
     }
 
     public static class ClientCFG

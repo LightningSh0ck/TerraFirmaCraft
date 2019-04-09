@@ -242,18 +242,6 @@ public class TECrucible extends TEInventory implements ITickable, ITileFields
         return alloy;
     }
 
-
-    /**
-     * Used on CLIENT for quicker rendering - doesn't have to calculate the alloy every render tick
-     *
-     * @return the current result of getAlloy().getResult()
-     */
-    @Nonnull
-    public Metal getAlloyResult()
-    {
-        return alloyResult;
-    }
-
     /**
      * Used on CLIENT to update the alloy contents
      * Also updates cached alloy result
@@ -264,5 +252,16 @@ public class TECrucible extends TEInventory implements ITickable, ITileFields
     {
         alloy.deserializeNBT(nbt);
         alloyResult = alloy.getResult();
+    }
+
+    /**
+     * Used on CLIENT for quicker rendering - doesn't have to calculate the alloy every render tick
+     *
+     * @return the current result of getAlloy().getResult()
+     */
+    @Nonnull
+    public Metal getAlloyResult()
+    {
+        return alloyResult;
     }
 }

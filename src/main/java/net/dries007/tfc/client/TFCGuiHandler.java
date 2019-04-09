@@ -71,6 +71,8 @@ public class TFCGuiHandler implements IGuiHandler
                 return new ContainerLiquidTransfer(player.inventory, stack.getItem() instanceof ItemMold ? stack : player.getHeldItemOffhand());
             case FIRE_PIT:
                 return new ContainerFirePit(player.inventory, Helpers.getTE(world, pos, TEFirePit.class));
+            case BARREL:
+                return new ContainerBarrel(player.inventory, Helpers.getTE(world, pos, TEBarrel.class));
             case CHARCOAL_FORGE:
                 return new ContainerCharcoalForge(player.inventory, Helpers.getTE(world, pos, TECharcoalForge.class));
             case ANVIL:
@@ -113,6 +115,8 @@ public class TFCGuiHandler implements IGuiHandler
                 return new GuiLiquidTransfer(container, player, player.getHeldItemMainhand().getItem() instanceof ItemMold);
             case FIRE_PIT:
                 return new GuiFirePit(container, player.inventory, Helpers.getTE(world, pos, TEFirePit.class));
+            case BARREL:
+                return new GuiBarrel(container, player.inventory, world.getBlockState(new BlockPos(x, y, z)).getBlock().getTranslationKey());
             case CHARCOAL_FORGE:
                 return new GuiCharcoalForge(container, player.inventory, Helpers.getTE(world, pos, TECharcoalForge.class));
             case ANVIL:
@@ -123,6 +127,7 @@ public class TFCGuiHandler implements IGuiHandler
                 ItemStack stack = player.getHeldItemMainhand();
                 Rock rock = stack.getItem() instanceof IRockObject ? ((IRockObject) stack.getItem()).getRock(stack) :
                     ((IRockObject) player.getHeldItemOffhand().getItem()).getRock(player.getHeldItemOffhand());
+                //noinspection ConstantConditions
                 return new GuiKnapping(container, player, KnappingRecipe.Type.STONE, rock.getTexture());
             case KNAPPING_CLAY:
                 return new GuiKnapping(container, player, KnappingRecipe.Type.CLAY, CLAY_TEXTURE);
@@ -146,6 +151,7 @@ public class TFCGuiHandler implements IGuiHandler
         SMALL_VESSEL_LIQUID,
         MOLD,
         FIRE_PIT,
+        BARREL,
         KNAPPING_STONE,
         KNAPPING_CLAY,
         KNAPPING_FIRE_CLAY,
