@@ -218,51 +218,6 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
         TerraFirmaCraft.getLog().debug("Burning? {}", world.getBlockState(pos).getValue(LIT));
     }
 
-    @Override
-    public int getFieldCount()
-    {
-        return 1;
-    }
-
-    @Override
-    public void setField(int index, int value)
-    {
-        if (index == FIELD_TEMPERATURE)
-        {
-            this.temperature = (float) value;
-        }
-        else
-        {
-            TerraFirmaCraft.getLog().warn("Invalid Field ID {} in TEFirePit#setField", index);
-        }
-    }
-
-    @Override
-    public int getField(int index)
-    {
-        if (index == FIELD_TEMPERATURE)
-        {
-            return (int) temperature;
-        }
-        TerraFirmaCraft.getLog().warn("Invalid Field ID {} in TEFirePit#getField", index);
-        return 0;
-    }
-
-    public void onAirIntake(float amount)
-    {
-        airTicks += (int) (200 * amount);
-        if (airTicks > 600)
-        {
-            airTicks = 600;
-        }
-    }
-
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-    {
-        return oldState.getBlock() != newSate.getBlock();
-    }
-
     private void cascadeFuelSlots()
     {
         // This will cascade all fuel down to the lowest available slot

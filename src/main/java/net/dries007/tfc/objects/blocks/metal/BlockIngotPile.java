@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,11 +28,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mcp.MethodsReturnNonnullByDefault;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
 import net.dries007.tfc.objects.items.metal.ItemMetal;
 import net.dries007.tfc.objects.te.TEIngotPile;
-import net.dries007.tfc.objects.te.TEWorldItem;
 import net.dries007.tfc.util.Helpers;
 
 @MethodsReturnNonnullByDefault
@@ -115,8 +116,17 @@ public class BlockIngotPile extends Block
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+    }
+
+    @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+        // This method handles the removal of ingots from the pile
+        // Adding new piles, or adding new ingots is done by ItemIngot's IPlaceable implementation
         if (playerIn.isSneaking()) return true;
 
         TEIngotPile te = Helpers.getTE(worldIn, pos, TEIngotPile.class);
@@ -144,21 +154,20 @@ public class BlockIngotPile extends Block
             else
             {
                 te = Helpers.getTE(worldIn, posTop, TEIngotPile.class);
-                if (te != null)
+                if (te == null) return true;
+                if (te.getCount() < 64)
                 {
-                    if (te.getCount() < 64)
+                    TerraFirmaCraft.getLog().info("Adding to an ingot pile via ItemIngot");
+                    te.setCount(te.getCount() - 1);
+                    if (!worldIn.isRemote)
                     {
-                        te.setCount(te.getCount() - 1);
-                        if (!worldIn.isRemote)
+                        if (te.getCount() <= 0)
                         {
-                            if (te.getCount() <= 0)
-                            {
-                                worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-                            }
-                            playerIn.addItemStackToInventory(new ItemStack(ItemMetal.get(te.getMetal(), Metal.ItemType.INGOT)));
+                            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
                         }
-                        return true;
+                        playerIn.addItemStackToInventory(new ItemStack(ItemMetal.get(te.getMetal(), Metal.ItemType.INGOT)));
                     }
+                    return true;
                 }
             }
         } while (posTop.getY() <= 256);
@@ -178,13 +187,6 @@ public class BlockIngotPile extends Block
     public boolean hasTileEntity(IBlockState state)
     {
         return true;
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state)
-    {
-        return new TEWorldItem();
     }
 
     @Override
@@ -222,5 +224,12 @@ public class BlockIngotPile extends Block
             return true;
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(World world, IBlockState state)
+    {
+        return new TEIngotPile();
     }
 }

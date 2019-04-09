@@ -44,6 +44,7 @@ public class TEIngotPile extends TEBase
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag)
     {
+        //noinspection ConstantConditions
         tag.setString("metal", (metal == null) ? Metal.UNKNOWN.toString() : metal.getRegistryName().toString());
         tag.setInteger("count", count);
         return super.writeToNBT(tag);
@@ -60,13 +61,12 @@ public class TEIngotPile extends TEBase
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getRenderBoundingBox()
     {
-        return new AxisAlignedBB(getPos(), getPos().add(1D, 1D, 1D));
+        return INFINITE_EXTENT_AABB;
     }
 
     public void onBreakBlock()
     {
-        InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(),
-            new ItemStack(ItemIngot.get(metal, Metal.ItemType.INGOT), count));
+        InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), new ItemStack(ItemIngot.get(metal, Metal.ItemType.INGOT), count));
     }
 
     public Metal getMetal()
