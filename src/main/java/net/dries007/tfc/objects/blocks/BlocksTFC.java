@@ -465,7 +465,7 @@ public final class BlocksTFC
         // todo: quern
         // todo: loom
         inventoryItemBlocks.add(new ItemBlockTFC(register(r, "bellows", new BlockBellows(), CT_MISC)));
-        // todo: bloomery
+        inventoryItemBlocks.add(new ItemBlockTFC(register(r, "bloomery", new BlockBloomery(), CT_MISC)));
         // todo: bloom/molten blocks
         // todo: large vessels
         // todo: nestbox
@@ -496,6 +496,7 @@ public final class BlocksTFC
         register(TECharcoalForge.class, "charcoal_forge");
         register(TEAnvilTFC.class, "anvil");
         register(TECrucible.class, "crucible");
+        register(TEBloomery.class, "bloomery");
     }
 
     public static boolean isWater(IBlockState current)

@@ -5,13 +5,9 @@
 
 package net.dries007.tfc.util;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.google.common.base.Joiner;
 import net.minecraft.block.state.IBlockState;
@@ -34,12 +30,23 @@ import net.dries007.tfc.objects.blocks.BlockPeat;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
 import net.dries007.tfc.objects.blocks.plants.BlockShortGrassTFC;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
+import net.dries007.tfc.util.lambda.FacingChecker;
 import net.dries007.tfc.world.classic.ClimateTFC;
 import net.dries007.tfc.world.classic.chunkdata.ChunkDataTFC;
+
+import static net.minecraft.util.EnumFacing.*;
 
 public final class Helpers
 {
     private static final Joiner JOINER_DOT = Joiner.on('.');
+
+
+    /**
+     * Used by horizontal rotatable blocks to search for a valid rotation in a given space,
+     * starting from a preferred rotation(like the direction a player is looking upon placing it)
+     * usage: facingPriorityLists.get(preferredFacing.getHorizontalIndex())
+     */
+    public static final List<List<EnumFacing>> facingPriorityLists = new ArrayList<>(4);
 
     public static void spreadGrass(World world, BlockPos pos, IBlockState us, Random rand)
     {
@@ -183,47 +190,47 @@ public final class Helpers
         world.spawnEntity(entityitem);
     }
 
-    /**
-     * Method for hanging blocks to check if they can hang. 11/10 description.
-     * NOTE: where applicable, remember to still check if the blockstate allows for the specified direction!
-     *
-     * @param pos    position of the block that makes the check
-     * @param facing the direction the block is facing. This is the direction the block should be pointing and the side it hangs ON, not the side it sticks WITH.
-     *               e.g: a sign facing north also hangs on the north side of the support block
-     * @return true if the side is solid, false otherwise.
-     */
-    public static boolean canHangAt(World worldIn, BlockPos pos, EnumFacing facing)
+    //an ugly initialisation, don't mind this
+    static
     {
-        return worldIn.isSideSolid(pos.offset(facing.getOpposite()), facing);
+        List<EnumFacing> list = new ArrayList<>(4);
+        list.add(SOUTH);
+        list.add(WEST);
+        list.add(EAST);
+        list.add(NORTH);
+        facingPriorityLists.add(list);
+        list = new ArrayList<>(4);
+        list.add(WEST);
+        list.add(NORTH);
+        list.add(SOUTH);
+        list.add(EAST);
+        facingPriorityLists.add(list);
+        list = new ArrayList<>(4);
+        list.add(NORTH);
+        list.add(EAST);
+        list.add(WEST);
+        list.add(SOUTH);
+        facingPriorityLists.add(list);
+        list = new ArrayList<>(4);
+        list.add(EAST);
+        list.add(SOUTH);
+        list.add(NORTH);
+        list.add(WEST);
+        facingPriorityLists.add(list);
     }
 
     /**
-     * Primarily for use in placing checks. Determines a solid side for the block to attach to.
-     *
-     * @param pos             position of the block/space to be checked.
-     * @param possibleSides   a list/array of all sides the block can attach to.
-     * @param preferredFacing this facing is checked first. It can be invalid or null.
-     * @return Found facing or null is none is found. This is the direction the block should be pointing and the side it stick TO, not the side it sticks WITH.
+     * @see #getAValidFacing
+     * very simillar, made for horizontally rotatable blocks
+     * @param preferredSide must be an {@link EnumFacing#HORIZONTALS}
+     * @return A valid Horizontal facing or null if none is
      */
-    public static EnumFacing getASolidFacing(World worldIn, BlockPos pos, @Nullable EnumFacing preferredFacing, EnumFacing... possibleSides)
+    public static EnumFacing getAValidHorizontal(World worldIn, BlockPos pos, FacingChecker checker, EnumFacing preferredSide)
     {
-        return getASolidFacing(worldIn, pos, preferredFacing, Arrays.asList(possibleSides));
-    }
-
-    public static EnumFacing getASolidFacing(World worldIn, BlockPos pos, @Nullable EnumFacing preferredFacing, Collection<EnumFacing> possibleSides)
-    {
-        if (preferredFacing != null && possibleSides.contains(preferredFacing) && canHangAt(worldIn, pos, preferredFacing))
-        {
-            return preferredFacing;
-        }
-        for (EnumFacing side : possibleSides)
-        {
-            if (side != null && canHangAt(worldIn, pos, side))
-            {
-                return side;
-            }
-        }
-        return null;
+        int index = preferredSide.getHorizontalIndex();
+        if (index == -1)
+            throw new IllegalArgumentException("Received side was not a horizontal");
+        return getAValidFacing(worldIn, pos, checker, facingPriorityLists.get(preferredSide.getHorizontalIndex()));
     }
 
     /**
@@ -238,6 +245,27 @@ public final class Helpers
     @SuppressWarnings("ConstantConditions")
     public static <T> T getNull()
     {
+        return null;
+    }
+
+    /**
+     * Primarily for use in placing checks. Determines a valid facing for a block.
+     *
+     * @param pos           position that the block does or is going to occupy.
+     * @param checker       the checking algorithm. For simple solid side checking,
+     * @param possibleSides a collection of all sides the block can face, sorted by priority.
+     * @return Found facing or null is none is found.
+     * @see FacingChecker#canHangAt
+     */
+    public static EnumFacing getAValidFacing(World worldIn, BlockPos pos, FacingChecker checker, Collection<EnumFacing> possibleSides)
+    {
+        for (EnumFacing side : possibleSides)
+        {
+            if (side != null && checker.canFace(worldIn, pos, side))
+            {
+                return side;
+            }
+        }
         return null;
     }
 }

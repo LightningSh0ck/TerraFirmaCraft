@@ -171,13 +171,13 @@ public class BlockCharcoalPile extends Block
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if (!world.isRemote)
-        {
-            ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getHeldItem(hand);
 
-            if (stack.getItem() == ItemsTFC.FIRESTARTER || stack.getItem() == Items.FLINT_AND_STEEL)
+        if (stack.getItem() == ItemsTFC.FIRESTARTER || stack.getItem() == Items.FLINT_AND_STEEL)
+        {
+            if (state.getValue(LAYERS) == 7)
             {
-                if (state.getValue(LAYERS) == 7)
+                if (!world.isRemote)
                 {
                     world.setBlockState(pos, BlocksTFC.CHARCOAL_FORGE.getDefaultState().withProperty(LIT, true));
                     TECharcoalForge te = Helpers.getTE(world, pos, TECharcoalForge.class);
@@ -186,10 +186,10 @@ public class BlockCharcoalPile extends Block
                         te.onCreate();
                     }
                 }
+                return true;
             }
-            return false;
         }
-        return true;
+        return false;
     }
 
     @Override

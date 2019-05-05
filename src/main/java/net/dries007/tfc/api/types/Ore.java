@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import net.dries007.tfc.api.registries.TFCRegistries;
-import net.dries007.tfc.util.OreBlockQuantity;
+import net.dries007.tfc.util.lambda.OreBlockQuantity;
 
 /**
  * todo: document API

@@ -78,8 +78,10 @@ public class BlockBellows extends Block
         return false;
     }
 
+    @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
+        //TODO: something is not quite right here, it feels like it only returns true server-side
         TEBellows te = Helpers.getTE(worldIn, pos, TEBellows.class);
         if (te == null) return true;
         return te.onRightClick();

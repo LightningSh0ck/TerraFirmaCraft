@@ -3,7 +3,7 @@
  * See the project README.md and LICENSE.txt for more information.
  */
 
-package net.dries007.tfc.util;
+package net.dries007.tfc.util.lambda;
 
 import java.util.Random;
 import javax.annotation.Nonnull;
@@ -14,7 +14,10 @@ public interface OreBlockQuantity
 {
     int quantityDropped(IBlockState state, int fortune, @Nonnull Random random);
 
-    //lambda will return from 1 to max
+    /**
+     * @param max imum number of items dropped per ore
+     * @return from 1 to max inclusive
+     */
     static OreBlockQuantity rng(int max)
     {
         return (state, fortune, random) -> 1 + random.nextInt(max);

@@ -5,9 +5,6 @@
 
 package net.dries007.tfc.types;
 
-import java.util.Random;
-
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,7 +18,7 @@ import net.dries007.tfc.objects.ToolMaterialsTFC;
 
 import static net.dries007.tfc.api.types.Metal.Tier.*;
 import static net.dries007.tfc.api.util.TFCConstants.MOD_ID;
-import static net.dries007.tfc.util.OreBlockQuantity.rng;
+import static net.dries007.tfc.util.lambda.OreBlockQuantity.rng;
 
 @SuppressWarnings("WeakerAccess")
 @Mod.EventBusSubscriber(modid = MOD_ID)
