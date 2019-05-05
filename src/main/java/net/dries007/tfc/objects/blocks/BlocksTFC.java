@@ -27,7 +27,7 @@ import net.dries007.tfc.api.types.*;
 import net.dries007.tfc.objects.blocks.devices.*;
 import net.dries007.tfc.objects.blocks.metal.BlockAnvilTFC;
 import net.dries007.tfc.objects.blocks.metal.BlockIngotPile;
-import net.dries007.tfc.objects.blocks.metal.BlockSheet;
+import net.dries007.tfc.objects.blocks.metal.BlockMetalSheet;
 import net.dries007.tfc.objects.blocks.plants.BlockPlantTFC;
 import net.dries007.tfc.objects.blocks.stone.*;
 import net.dries007.tfc.objects.blocks.wood.*;
@@ -103,6 +103,8 @@ public final class BlocksTFC
     public static final BlockTorchTFC TORCH = getNull();
     public static final BlockCharcoalForge CHARCOAL_FORGE = getNull();
     public static final BlockCrucible CRUCIBLE = getNull();
+    public static final BlockMolten MOLTEN = getNull();
+    public static final BlockBlastFurnace BLAST_FURNACE = getNull();
 
     // All these are for use in model registration. Do not use for block lookups.
     // Use the static get methods in the classes instead.
@@ -124,7 +126,7 @@ public final class BlocksTFC
     private static ImmutableList<BlockSlabTFC.Half> allSlabBlocks;
     private static ImmutableList<BlockChestTFC> allChestBlocks;
     private static ImmutableList<BlockAnvilTFC> allAnvils;
-    private static ImmutableList<BlockSheet> allSheets;
+    private static ImmutableList<BlockMetalSheet> allSheets;
     private static ImmutableList<BlockToolRack> allToolRackBlocks;
     private static ImmutableList<BlockPlantTFC> allPlantBlocks;
     private static ImmutableList<BlockPlantTFC> allGrassBlocks;
@@ -211,7 +213,7 @@ public final class BlocksTFC
         return allAnvils;
     }
 
-    public static ImmutableList<BlockSheet> getAllSheets()
+    public static ImmutableList<BlockMetalSheet> getAllSheets()
     {
         return allSheets;
     }
@@ -251,6 +253,7 @@ public final class BlocksTFC
         normalItemBlocks.add(new ItemBlock(register(r, "thatch", new BlockThatch(Material.PLANTS), CT_DECORATIONS)));
 
         normalItemBlocks.add(new ItemBlock(register(r, "crucible", new BlockCrucible(), CT_MISC)));
+        normalItemBlocks.add(new ItemBlock(register(r, "blast_furnace", new BlockBlastFurnace(), CT_MISC)));
 
         {
             Builder<BlockFluidBase> b = ImmutableList.builder();
@@ -390,14 +393,14 @@ public final class BlocksTFC
 
         {
             Builder<BlockAnvilTFC> anvils = ImmutableList.builder();
-            Builder<BlockSheet> sheets = ImmutableList.builder();
+            Builder<BlockMetalSheet> sheets = ImmutableList.builder();
 
             for (Metal metal : TFCRegistries.METALS.getValuesCollection())
             {
                 if (Metal.ItemType.ANVIL.hasType(metal))
                     anvils.add(register(r, "anvil/" + metal.getRegistryName().getPath(), new BlockAnvilTFC(metal), CT_METAL));
                 if (Metal.ItemType.SHEET.hasType(metal))
-                    sheets.add(register(r, "sheet/" + metal.getRegistryName().getPath(), new BlockSheet(metal), CT_METAL));
+                    sheets.add(register(r, "sheet/" + metal.getRegistryName().getPath(), new BlockMetalSheet(metal), CT_METAL));
             }
 
             allAnvils = anvils.build();
@@ -451,6 +454,7 @@ public final class BlocksTFC
         register(r, "ingot_pile", new BlockIngotPile());
         register(r, "log_pile", new BlockLogPile());
         register(r, "pit_kiln", new BlockPitKiln());
+        register(r, "molten", new BlockMolten());
 
         // todo: pumpkin/melon ?
         // todo: fruit tree stuff (leaves, saplings, logs)
@@ -496,6 +500,8 @@ public final class BlocksTFC
         register(TECharcoalForge.class, "charcoal_forge");
         register(TEAnvilTFC.class, "anvil");
         register(TECrucible.class, "crucible");
+        register(TEBlastFurnace.class, "blast_furnace");
+        register(TEMetalSheet.class, "metal_sheet");
         register(TEBloomery.class, "bloomery");
     }
 

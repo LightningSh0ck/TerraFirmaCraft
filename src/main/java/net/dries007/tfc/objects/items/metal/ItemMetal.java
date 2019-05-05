@@ -34,8 +34,8 @@ public class ItemMetal extends ItemTFC implements IMetalObject
         return TABLE.get(metal).get(type);
     }
 
-    public final Metal metal;
-    public final Metal.ItemType type;
+    protected final Metal metal;
+    protected final Metal.ItemType type;
 
     public ItemMetal(Metal metal, Metal.ItemType type)
     {
@@ -185,6 +185,11 @@ public class ItemMetal extends ItemTFC implements IMetalObject
                 return EnumRarity.EPIC;
         }
         return super.getRarity(stack);
+    }
+
+    public Metal.ItemType getType()
+    {
+        return type;
     }
 
     @Nullable

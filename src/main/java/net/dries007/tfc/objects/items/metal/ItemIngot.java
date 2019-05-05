@@ -16,6 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.IPlaceableItem;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
@@ -47,6 +48,7 @@ public class ItemIngot extends ItemMetal implements IPlaceableItem
             {
                 if (!world.isRemote)
                 {
+                    TerraFirmaCraft.getLog().info("Placing an ingot pile via ItemIngot");
                     BlockPos up = pos.up();
                     world.setBlockState(up, BlocksTFC.INGOT_PILE.getDefaultState());
                     TEIngotPile te = Helpers.getTE(world, up, TEIngotPile.class);
@@ -68,6 +70,7 @@ public class ItemIngot extends ItemMetal implements IPlaceableItem
             IBlockState stateTop;
             do
             {
+                TerraFirmaCraft.getLog().info("Adding to an ingot pile via ItemIngot");
                 posTop = posTop.up();
                 stateTop = world.getBlockState(posTop);
                 if (stateTop.getBlock() == BlocksTFC.INGOT_PILE)

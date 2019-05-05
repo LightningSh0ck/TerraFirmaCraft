@@ -8,6 +8,7 @@ package net.dries007.tfc.objects.te;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,6 +27,7 @@ import net.dries007.tfc.objects.recipes.heat.HeatRecipe;
 import net.dries007.tfc.objects.recipes.heat.HeatRecipeManager;
 import net.dries007.tfc.util.Fuel;
 import net.dries007.tfc.util.FuelManager;
+import net.dries007.tfc.util.IHeatConsumerBlock;
 import net.dries007.tfc.util.ITileFields;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
@@ -56,16 +58,6 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
         temperature = 0;
         burnTemperature = 0;
         burnTicks = 0;
-    }
-
-    /**
-     * Used by {@link net.dries007.tfc.util.IHeatProviderBlock}
-     *
-     * @return the temperature
-     */
-    public float getTemperature()
-    {
-        return temperature;
     }
 
     @Override
@@ -122,6 +114,13 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
             else if (temperature > targetTemp)
             {
                 temperature -= (airTicks > 0 ? 0.5 : 1) * ConfigTFC.GENERAL.temperatureModifierHeating;
+            }
+
+            // Provide heat to blocks that are one block above
+            Block blockUp = world.getBlockState(pos.up()).getBlock();
+            if (blockUp instanceof IHeatConsumerBlock)
+            {
+                ((IHeatConsumerBlock) blockUp).acceptHeat(world, pos.up(), temperature);
             }
 
             // Update items in slots
@@ -219,51 +218,6 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
         TerraFirmaCraft.getLog().debug("Burning? {}", world.getBlockState(pos).getValue(LIT));
     }
 
-    @Override
-    public int getFieldCount()
-    {
-        return 1;
-    }
-
-    @Override
-    public void setField(int index, int value)
-    {
-        if (index == FIELD_TEMPERATURE)
-        {
-            this.temperature = (float) value;
-        }
-        else
-        {
-            TerraFirmaCraft.getLog().warn("Invalid Field ID {} in TEFirePit#setField", index);
-        }
-    }
-
-    @Override
-    public int getField(int index)
-    {
-        if (index == FIELD_TEMPERATURE)
-        {
-            return (int) temperature;
-        }
-        TerraFirmaCraft.getLog().warn("Invalid Field ID {} in TEFirePit#getField", index);
-        return 0;
-    }
-
-    public void onAirIntake(float amount)
-    {
-        airTicks += (int) (200 * amount);
-        if (airTicks > 600)
-        {
-            airTicks = 600;
-        }
-    }
-
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
-    {
-        return oldState.getBlock() != newSate.getBlock();
-    }
-
     private void cascadeFuelSlots()
     {
         // This will cascade all fuel down to the lowest available slot
@@ -348,5 +302,50 @@ public class TEFirePit extends TEInventory implements ITickable, ITileFields
             ItemStack inputStack = recipe.consumeInput(stack);
             inventory.setStackInSlot(SLOT_ITEM_INPUT, inputStack);
         }
+    }
+
+    @Override
+    public int getFieldCount()
+    {
+        return 1;
+    }
+
+    @Override
+    public void setField(int index, int value)
+    {
+        if (index == FIELD_TEMPERATURE)
+        {
+            this.temperature = (float) value;
+        }
+        else
+        {
+            TerraFirmaCraft.getLog().warn("Invalid Field ID {} in TEFirePit#setField", index);
+        }
+    }
+
+    @Override
+    public int getField(int index)
+    {
+        if (index == FIELD_TEMPERATURE)
+        {
+            return (int) temperature;
+        }
+        TerraFirmaCraft.getLog().warn("Invalid Field ID {} in TEFirePit#getField", index);
+        return 0;
+    }
+
+    public void onAirIntake(int amount)
+    {
+        airTicks += amount;
+        if (airTicks > 600)
+        {
+            airTicks = 600;
+        }
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+    {
+        return oldState.getBlock() != newSate.getBlock();
     }
 }

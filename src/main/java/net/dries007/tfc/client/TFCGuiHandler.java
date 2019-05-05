@@ -89,6 +89,8 @@ public class TFCGuiHandler implements IGuiHandler
                 return new ContainerKnapping(KnappingRecipe.Type.FIRE_CLAY, player.inventory, stack.getItem() == ItemsTFC.FIRE_CLAY ? stack : player.getHeldItemOffhand());
             case CRUCIBLE:
                 return new ContainerCrucible(player.inventory, Helpers.getTE(world, pos, TECrucible.class));
+            case BLAST_FURNACE:
+                return new ContainerBlastFurnace(player.inventory, Helpers.getTE(world, pos, TEBlastFurnace.class));
             default:
                 return null;
         }
@@ -135,6 +137,8 @@ public class TFCGuiHandler implements IGuiHandler
                 return new GuiKnapping(container, player, KnappingRecipe.Type.FIRE_CLAY, FIRE_CLAY_TEXTURE);
             case CRUCIBLE:
                 return new GuiCrucible(container, player.inventory, Helpers.getTE(world, pos, TECrucible.class));
+            case BLAST_FURNACE:
+                return new GuiBlastFurnace(container, player.inventory, Helpers.getTE(world, pos, TEBlastFurnace.class));
             default:
                 return null;
         }
@@ -156,6 +160,7 @@ public class TFCGuiHandler implements IGuiHandler
         ANVIL,
         ANVIL_PLAN,
         CRUCIBLE,
+        BLAST_FURNACE,
         NULL;
 
         private static Type[] values = values();
