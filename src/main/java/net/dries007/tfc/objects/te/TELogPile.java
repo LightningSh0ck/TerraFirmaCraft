@@ -25,7 +25,7 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.OreDictionaryHelper;
 
 import static net.dries007.tfc.objects.blocks.BlockCharcoalPile.LAYERS;
-import static net.dries007.tfc.objects.blocks.wood.BlockLogPile.ONFIRE;
+import static net.dries007.tfc.util.ILightableBlock.LIT;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -176,8 +176,8 @@ public class TELogPile extends TEInventory implements ITickable
             IBlockState state = world.getBlockState(pos.offset(side));
             if (state.getBlock() instanceof BlockLogPile)
             {
-                if (state.getValue(ONFIRE)) continue;
-                world.setBlockState(pos.offset(side), state.withProperty(ONFIRE, true));
+                if (state.getValue(LIT)) continue;
+                world.setBlockState(pos.offset(side), state.withProperty(LIT, true));
                 TELogPile tile = Helpers.getTE(world, pos.offset(side), TELogPile.class);
                 if (tile != null)
                 {

@@ -11,7 +11,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -25,10 +24,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import net.dries007.tfc.util.ILightableBlock;
+
 @ParametersAreNonnullByDefault
-public class BlockMolten extends Block
+public class BlockMolten extends Block implements ILightableBlock
 {
-    public static final PropertyBool LIT = PropertyBool.create("lit");
     public static final PropertyInteger LAYERS = PropertyInteger.create("layers", 1, 4);
 
     private static final AxisAlignedBB[] MOLTEN_AABB = new AxisAlignedBB[] {

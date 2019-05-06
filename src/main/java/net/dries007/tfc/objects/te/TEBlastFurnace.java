@@ -28,12 +28,11 @@ import net.dries007.tfc.api.capability.heat.IItemHeat;
 import net.dries007.tfc.api.types.Metal;
 import net.dries007.tfc.api.util.IMetalObject;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
-import net.dries007.tfc.objects.blocks.devices.BlockBlastFurnace;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.OreDictionaryHelper;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
-import static net.dries007.tfc.objects.blocks.devices.BlockBlastFurnace.LIT;
+import static net.dries007.tfc.util.ILightableBlock.LIT;
 import static net.dries007.tfc.util.FuelManager.CHARCOAL_BURN_TEMPERATURE;
 
 @ParametersAreNonnullByDefault
@@ -113,7 +112,7 @@ public class TEBlastFurnace extends TEInventory implements ITickable
             {
                 delayTimer = 20;
                 // Update multiblock status
-                int newMaxOreItems = BlockBlastFurnace.getChimneyLevels(world, pos) * 4;
+                int newMaxOreItems = BlocksTFC.BLAST_FURNACE.getChimneyLevels(world, pos) * 4;
                 if (newMaxOreItems != maxOreItems)
                 {
                     // Change happened here

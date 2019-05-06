@@ -3,12 +3,13 @@
  * See the project README.md and LICENSE.txt for more information.
  */
 
-package net.dries007.tfc.util.lambda;
+package net.dries007.tfc.util.functionalinterfaces;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+@FunctionalInterface
 public interface FacingChecker
 {
     /**

@@ -6,7 +6,7 @@
 package net.dries007.tfc.objects.blocks.devices;
 
 import java.util.Random;
-import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -14,7 +14,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -41,18 +40,18 @@ import net.dries007.tfc.objects.te.TECharcoalForge;
 import net.dries007.tfc.objects.te.TEInventory;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.IBellowsConsumerBlock;
+import net.dries007.tfc.util.ILightableBlock;
 import net.dries007.tfc.util.Multiblock;
 
 @ParametersAreNonnullByDefault
-public class BlockCharcoalForge extends Block implements IBellowsConsumerBlock
+public class BlockCharcoalForge extends Block implements IBellowsConsumerBlock, ILightableBlock
 {
-    public static final PropertyBool LIT = PropertyBool.create("lit");
     private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
     private static final Multiblock CHARCOAL_FORGE_MULTIBLOCK;
 
     static
     {
-        BiFunction<World, BlockPos, Boolean> skyMatcher = World::canBlockSeeSky;
+        BiPredicate<World, BlockPos> skyMatcher = World::canBlockSeeSky;
         CHARCOAL_FORGE_MULTIBLOCK = new Multiblock()
             .match(new BlockPos(0, 1, 0), state -> state.getBlock() == BlocksTFC.CRUCIBLE || state.getBlock() == Blocks.AIR)
             .matchOneOf(new BlockPos(0, 1, 0), new Multiblock()

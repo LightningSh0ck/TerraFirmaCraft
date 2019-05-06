@@ -12,7 +12,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -37,11 +36,11 @@ import net.dries007.tfc.objects.te.TEBellows;
 import net.dries007.tfc.objects.te.TEFirePit;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.IBellowsConsumerBlock;
+import net.dries007.tfc.util.ILightableBlock;
 
 @ParametersAreNonnullByDefault
-public class BlockFirePit extends Block implements IBellowsConsumerBlock
+public class BlockFirePit extends Block implements IBellowsConsumerBlock, ILightableBlock
 {
-    public static final PropertyBool LIT = PropertyBool.create("lit");
     private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.03125D, 0.9375D);
 
     public BlockFirePit()

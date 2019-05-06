@@ -23,7 +23,6 @@ import net.dries007.tfc.ConfigTFC;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.api.capability.heat.CapabilityItemHeat;
 import net.dries007.tfc.api.capability.heat.IItemHeat;
-import net.dries007.tfc.objects.blocks.devices.BlockFirePit;
 import net.dries007.tfc.objects.recipes.heat.HeatRecipe;
 import net.dries007.tfc.objects.recipes.heat.HeatRecipeManager;
 import net.dries007.tfc.util.Fuel;
@@ -32,7 +31,7 @@ import net.dries007.tfc.util.IHeatConsumerBlock;
 import net.dries007.tfc.util.ITileFields;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
-import static net.dries007.tfc.objects.blocks.devices.BlockCharcoalForge.LIT;
+import static net.dries007.tfc.util.ILightableBlock.LIT;
 
 @ParametersAreNonnullByDefault
 public class TECharcoalForge extends TEInventory implements ITickable, ITileFields
@@ -79,7 +78,7 @@ public class TECharcoalForge extends TEInventory implements ITickable, ITileFiel
     {
         if (world.isRemote) return;
         IBlockState state = world.getBlockState(pos);
-        if (state.getValue(BlockFirePit.LIT))
+        if (state.getValue(LIT))
         {
             // Update fuel
             if (burnTicks > 0)
@@ -93,7 +92,7 @@ public class TECharcoalForge extends TEInventory implements ITickable, ITileFiel
                 ItemStack stack = inventory.getStackInSlot(SLOT_FUEL_MIN);
                 if (stack.isEmpty())
                 {
-                    world.setBlockState(pos, state.withProperty(BlockFirePit.LIT, false));
+                    world.setBlockState(pos, state.withProperty(LIT, false));
                     burnTicks = 0;
                     burnTemperature = 0;
                 }

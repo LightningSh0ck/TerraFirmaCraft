@@ -32,11 +32,10 @@ import net.minecraft.world.World;
 import net.dries007.tfc.objects.items.ItemsTFC;
 import net.dries007.tfc.objects.te.TECharcoalForge;
 import net.dries007.tfc.util.Helpers;
-
-import static net.dries007.tfc.objects.blocks.devices.BlockCharcoalForge.LIT;
+import net.dries007.tfc.util.ILightableBlock;
 
 @ParametersAreNonnullByDefault
-public class BlockCharcoalPile extends Block
+public class BlockCharcoalPile extends Block implements ILightableBlock
 {
     public static final PropertyInteger LAYERS = PropertyInteger.create("type", 1, 8);
     private static final AxisAlignedBB[] PILE_AABB = new AxisAlignedBB[] {

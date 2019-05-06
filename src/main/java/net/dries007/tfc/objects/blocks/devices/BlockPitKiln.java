@@ -28,13 +28,13 @@ import net.minecraft.world.World;
 import mcp.MethodsReturnNonnullByDefault;
 import net.dries007.tfc.objects.te.TEPitKiln;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.ILightableBlock;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockPitKiln extends Block
+public class BlockPitKiln extends Block implements ILightableBlock
 {
     public static final PropertyBool FULL = PropertyBool.create("full");
-    public static final PropertyBool LIT = PropertyBool.create("lit");
     protected static final AxisAlignedBB AABB = new AxisAlignedBB(0, 0, 0, 1, 1D / 16D, 1);
 
     public BlockPitKiln()
@@ -71,7 +71,7 @@ public class BlockPitKiln extends Block
     {
         TEPitKiln te = Helpers.getTE(worldIn, pos, TEPitKiln.class);
         if (te == null) return state;
-        return state.withProperty(BlockPitKiln.LIT, te.isLit()).withProperty(BlockPitKiln.FULL, te.hasFuel());
+        return state.withProperty(LIT, te.isLit()).withProperty(BlockPitKiln.FULL, te.hasFuel());
     }
 
     @Override

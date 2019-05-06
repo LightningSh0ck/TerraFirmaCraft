@@ -37,7 +37,7 @@ import net.dries007.tfc.objects.te.TEToolRack;
 import net.dries007.tfc.util.Helpers;
 
 import static net.dries007.tfc.util.Helpers.getAValidHorizontal;
-import static net.dries007.tfc.util.lambda.FacingChecker.canHangAt;
+import static net.dries007.tfc.util.functionalinterfaces.FacingChecker.canHangAt;
 import static net.minecraft.block.BlockHorizontal.FACING;
 import static net.minecraft.block.material.Material.WOOD;
 

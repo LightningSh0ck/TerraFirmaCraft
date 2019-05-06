@@ -33,23 +33,17 @@ import net.dries007.tfc.objects.blocks.BlockPeat;
 import net.dries007.tfc.objects.blocks.BlocksTFC;
 import net.dries007.tfc.objects.blocks.plants.BlockShortGrassTFC;
 import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
-import net.dries007.tfc.util.lambda.FacingChecker;
+import net.dries007.tfc.util.functionalinterfaces.FacingChecker;
 import net.dries007.tfc.world.classic.ClimateTFC;
 import net.dries007.tfc.world.classic.chunkdata.ChunkDataTFC;
 
+import static net.dries007.tfc.Constants.facingPriorityLists;
 import static net.minecraft.util.EnumFacing.*;
 
 public final class Helpers
 {
     private static final Joiner JOINER_DOT = Joiner.on('.');
 
-
-    /**
-     * Used by horizontal rotatable blocks to search for a valid rotation in a given space,
-     * starting from a preferred rotation(like the direction a player is looking upon placing it)
-     * usage: facingPriorityLists.get(preferredFacing.getHorizontalIndex())
-     */
-    public static final List<List<EnumFacing>> facingPriorityLists = new ArrayList<>(4);
 
     public static void spreadGrass(World world, BlockPos pos, IBlockState us, Random rand)
     {
@@ -211,35 +205,6 @@ public final class Helpers
             return;
         EntityItem entityitem = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack);
         world.spawnEntity(entityitem);
-    }
-
-    //an ugly initialisation, don't mind this
-    static
-    {
-        List<EnumFacing> list = new ArrayList<>(4);
-        list.add(SOUTH);
-        list.add(WEST);
-        list.add(EAST);
-        list.add(NORTH);
-        facingPriorityLists.add(list);
-        list = new ArrayList<>(4);
-        list.add(WEST);
-        list.add(NORTH);
-        list.add(SOUTH);
-        list.add(EAST);
-        facingPriorityLists.add(list);
-        list = new ArrayList<>(4);
-        list.add(NORTH);
-        list.add(EAST);
-        list.add(WEST);
-        list.add(SOUTH);
-        facingPriorityLists.add(list);
-        list = new ArrayList<>(4);
-        list.add(EAST);
-        list.add(SOUTH);
-        list.add(NORTH);
-        list.add(WEST);
-        facingPriorityLists.add(list);
     }
 
     /**

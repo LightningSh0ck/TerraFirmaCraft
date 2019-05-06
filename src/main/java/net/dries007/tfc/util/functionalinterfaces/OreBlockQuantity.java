@@ -3,13 +3,14 @@
  * See the project README.md and LICENSE.txt for more information.
  */
 
-package net.dries007.tfc.util.lambda;
+package net.dries007.tfc.util.functionalinterfaces;
 
 import java.util.Random;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.state.IBlockState;
 
+@FunctionalInterface
 public interface OreBlockQuantity
 {
     int quantityDropped(IBlockState state, int fortune, @Nonnull Random random);

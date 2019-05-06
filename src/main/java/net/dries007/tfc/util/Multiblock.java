@@ -7,7 +7,6 @@ package net.dries007.tfc.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -18,16 +17,16 @@ import net.minecraft.world.World;
 
 public class Multiblock implements BiPredicate<World, BlockPos>
 {
-    private final List<BiFunction<World, BlockPos, Boolean>> conditions;
+    private final List<BiPredicate<World, BlockPos>> conditions;
 
     public Multiblock()
     {
         this.conditions = new ArrayList<>();
     }
 
-    public Multiblock match(BlockPos posOffset, BiFunction<World, BlockPos, Boolean> condition)
+    public Multiblock match(BlockPos posOffset, BiPredicate<World, BlockPos> condition)
     {
-        conditions.add((world, pos) -> condition.apply(world, pos.add(posOffset)));
+        conditions.add((world, pos) -> condition.test(world, pos.add(posOffset)));
         return this;
     }
 
@@ -53,9 +52,9 @@ public class Multiblock implements BiPredicate<World, BlockPos>
     public Multiblock matchOneOf(BlockPos baseOffset, Multiblock subMultiblock)
     {
         conditions.add((world, pos) -> {
-            for (BiFunction<World, BlockPos, Boolean> condition : subMultiblock.conditions)
+            for (BiPredicate<World, BlockPos> condition : subMultiblock.conditions)
             {
-                if (condition.apply(world, pos.add(baseOffset)))
+                if (condition.test(world, pos.add(baseOffset)))
                 {
                     return true;
                 }
@@ -68,9 +67,9 @@ public class Multiblock implements BiPredicate<World, BlockPos>
     public Multiblock matchAllOf(BlockPos baseOffset, Multiblock subMultiblock)
     {
         conditions.add((world, pos) -> {
-            for (BiFunction<World, BlockPos, Boolean> condition : subMultiblock.conditions)
+            for (BiPredicate<World, BlockPos> condition : subMultiblock.conditions)
             {
-                if (!condition.apply(world, pos.add(baseOffset)))
+                if (!condition.test(world, pos.add(baseOffset)))
                 {
                     return false;
                 }
@@ -83,9 +82,9 @@ public class Multiblock implements BiPredicate<World, BlockPos>
     @Override
     public boolean test(World world, BlockPos pos)
     {
-        for (BiFunction<World, BlockPos, Boolean> condition : conditions)
+        for (BiPredicate<World, BlockPos> condition : conditions)
         {
-            if (!condition.apply(world, pos))
+            if (!condition.test(world, pos))
             {
                 return false;
             }

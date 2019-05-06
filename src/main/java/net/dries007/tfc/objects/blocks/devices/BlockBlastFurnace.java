@@ -12,7 +12,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,32 +34,15 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.IBellowsConsumerBlock;
 import net.dries007.tfc.util.Multiblock;
 
+import static net.dries007.tfc.util.ILightableBlock.LIT;
+
 @ParametersAreNonnullByDefault
 public class BlockBlastFurnace extends Block implements IBellowsConsumerBlock
 {
-    public static final PropertyBool LIT = PropertyBool.create("lit");
-    private static final Multiblock BLAST_FURNACE_CHIMNEY;
+    //removed static in order to grant addon makers customization possibilities
+    private final Multiblock BLAST_FURNACE_CHIMNEY;
 
-    static
-    {
-        Predicate<IBlockState> stoneMatcher = state -> state.getMaterial() == Material.ROCK && state.isNormalCube();
-        BLAST_FURNACE_CHIMNEY = new Multiblock()
-            .match(new BlockPos(0, 0, 0), state -> state.getBlock() == BlocksTFC.MOLTEN || state.getBlock() == Blocks.AIR)
-            .match(new BlockPos(0, 0, 1), stoneMatcher)
-            .match(new BlockPos(0, 0, 2), tile -> tile.getFace(EnumFacing.NORTH), TEMetalSheet.class)
-            .match(new BlockPos(0, 0, -1), stoneMatcher)
-            .match(new BlockPos(0, 0, -2), tile -> tile.getFace(EnumFacing.SOUTH), TEMetalSheet.class)
-            .match(new BlockPos(1, 0, 0), stoneMatcher)
-            .match(new BlockPos(2, 0, 0), tile -> tile.getFace(EnumFacing.WEST), TEMetalSheet.class)
-            .match(new BlockPos(1, 0, 0), stoneMatcher)
-            .match(new BlockPos(2, 0, 0), tile -> tile.getFace(EnumFacing.EAST), TEMetalSheet.class)
-            .match(new BlockPos(1, 0, 1), tile -> tile.getFace(EnumFacing.NORTH) && tile.getFace(EnumFacing.WEST), TEMetalSheet.class)
-            .match(new BlockPos(-1, 0, 1), tile -> tile.getFace(EnumFacing.SOUTH) && tile.getFace(EnumFacing.WEST), TEMetalSheet.class)
-            .match(new BlockPos(1, 0, -1), tile -> tile.getFace(EnumFacing.NORTH) && tile.getFace(EnumFacing.EAST), TEMetalSheet.class)
-            .match(new BlockPos(-1, 0, -1), tile -> tile.getFace(EnumFacing.SOUTH) && tile.getFace(EnumFacing.EAST), TEMetalSheet.class);
-    }
-
-    public static int getChimneyLevels(World world, BlockPos pos)
+    public int getChimneyLevels(World world, BlockPos pos)
     {
         if (world.getBlockState(pos.down()).getBlock() != BlocksTFC.CRUCIBLE)
         {
@@ -82,6 +64,22 @@ public class BlockBlastFurnace extends Block implements IBellowsConsumerBlock
     public BlockBlastFurnace()
     {
         super(Material.IRON);
+        //TODO: update when firebricks are added
+        Predicate<IBlockState> stoneMatcher = state -> state.getMaterial() == Material.ROCK && state.isNormalCube();
+        BLAST_FURNACE_CHIMNEY = new Multiblock()
+            .match(new BlockPos(0, 0, 0), state -> state.getBlock() == BlocksTFC.MOLTEN || state.getBlock() == Blocks.AIR)
+            .match(new BlockPos(0, 0, 1), stoneMatcher)
+            .match(new BlockPos(0, 0, 2), tile -> tile.getFace(EnumFacing.NORTH), TEMetalSheet.class)
+            .match(new BlockPos(0, 0, -1), stoneMatcher)
+            .match(new BlockPos(0, 0, -2), tile -> tile.getFace(EnumFacing.SOUTH), TEMetalSheet.class)
+            .match(new BlockPos(1, 0, 0), stoneMatcher)
+            .match(new BlockPos(2, 0, 0), tile -> tile.getFace(EnumFacing.WEST), TEMetalSheet.class)
+            .match(new BlockPos(1, 0, 0), stoneMatcher)
+            .match(new BlockPos(2, 0, 0), tile -> tile.getFace(EnumFacing.EAST), TEMetalSheet.class)
+            .match(new BlockPos(1, 0, 1), tile -> tile.getFace(EnumFacing.NORTH) && tile.getFace(EnumFacing.WEST), TEMetalSheet.class)
+            .match(new BlockPos(-1, 0, 1), tile -> tile.getFace(EnumFacing.SOUTH) && tile.getFace(EnumFacing.WEST), TEMetalSheet.class)
+            .match(new BlockPos(1, 0, -1), tile -> tile.getFace(EnumFacing.NORTH) && tile.getFace(EnumFacing.EAST), TEMetalSheet.class)
+            .match(new BlockPos(-1, 0, -1), tile -> tile.getFace(EnumFacing.SOUTH) && tile.getFace(EnumFacing.EAST), TEMetalSheet.class);
     }
 
     @SuppressWarnings("deprecation")

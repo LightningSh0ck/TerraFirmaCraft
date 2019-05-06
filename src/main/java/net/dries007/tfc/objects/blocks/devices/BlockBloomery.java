@@ -33,15 +33,14 @@ import net.dries007.tfc.api.capability.size.Weight;
 import net.dries007.tfc.objects.items.ItemFireStarter;
 import net.dries007.tfc.objects.te.TEBloomery;
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.lambda.FacingChecker;
+import net.dries007.tfc.util.ILightableBlock;
+import net.dries007.tfc.util.functionalinterfaces.FacingChecker;
 
 import static net.dries007.tfc.util.Helpers.getAValidHorizontal;
+import static net.minecraft.block.BlockTrapDoor.OPEN;
 
-public class BlockBloomery extends BlockHorizontal implements IItemSize
+public class BlockBloomery extends BlockHorizontal implements IItemSize, ILightableBlock
 {
-    public static final PropertyBool LIT = PropertyBool.create("lit");
-    public static final PropertyBool OPEN = PropertyBool.create("open");
-
     //[horizontal index][basic shape / door1 / door2]
     private static final AxisAlignedBB[][] AABB =
         {

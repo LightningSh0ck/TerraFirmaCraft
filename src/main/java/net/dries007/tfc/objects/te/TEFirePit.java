@@ -31,7 +31,7 @@ import net.dries007.tfc.util.IHeatConsumerBlock;
 import net.dries007.tfc.util.ITileFields;
 
 import static net.dries007.tfc.api.capability.heat.CapabilityItemHeat.MAX_TEMPERATURE;
-import static net.dries007.tfc.objects.blocks.devices.BlockFirePit.LIT;
+import static net.dries007.tfc.util.ILightableBlock.LIT;
 
 @ParametersAreNonnullByDefault
 public class TEFirePit extends TEInventory implements ITickable, ITileFields
